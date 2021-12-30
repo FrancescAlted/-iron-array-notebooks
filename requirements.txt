@@ -1,4 +1,3 @@
-scipy
 wurlitzer
 dask
 zarr
@@ -11,5 +10,4 @@ notebook
 matplotlib
 h5py
 hdf5plugin
-numba
 iarray
