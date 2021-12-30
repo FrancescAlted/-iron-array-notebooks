@@ -9,4 +9,6 @@ memory_profiler
 memprofiler
 notebook
 matplotlib
+h5py
+hdf5plugin
 iarray
