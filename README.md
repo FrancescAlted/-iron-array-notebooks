@@ -8,6 +8,7 @@ Enjoy!
 ## Requirements installation
 
 ```
+conda install --channel conda --file requirements_conda.txt
 pip install -i https://username:password@distribution.ironarray.io/simple -r requirements.txt
 ```
 
