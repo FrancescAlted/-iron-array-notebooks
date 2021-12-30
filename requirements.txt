@@ -1,0 +1,12 @@
+scipy
+wurlitzer
+dask
+zarr
+xarray
+s3fs
+tiledb
+memory_profiler
+memprofiler
+notebook
+matplotlib
+iarray
