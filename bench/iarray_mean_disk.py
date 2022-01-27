@@ -57,18 +57,17 @@ def iarray_mean_disk(expr):
         expr_val = expr.eval(mode="w")
     return expr_val
 
-os.system(cmd)
 t0 = time()
 mean_expr = (precip1 + precip2 + precip3) / 3
 t = time() - t0
 print("mean expr time ->", round(t, 3))
 
-if os.path.exists("mean-3m.iarr"): ia.remove_urlpath("mean-3m.iarr")
+if os.path.exists("mean-3m.iarr"):
+    ia.remove_urlpath("mean-3m.iarr")
 t0 = time()
 mean_disk = iarray_mean_disk(mean_expr)
 t = time() - t0
 print("mean eval time ->", round(t, 3))
-mean_disk.info
 
 
 @profile
