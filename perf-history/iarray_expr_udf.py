@@ -69,30 +69,22 @@ print("cratio:", round(precip1.cratio, 3))
 
 @profile
 def iarray_expr_udf(expr):
-    expr_val = expr.eval()
-    return expr_val
+    return expr.eval()
 
 
 @profile
-def iarray_expr_lazy_mean():
-    precip_expr2 = (precip1 + precip2 + precip3) / 3
-    return precip_expr2.eval()
-
-
-@profile
-def iarray_expr_lazy_trans():
-    lazy_trans_expr = ia.tan(precip1) * (ia.sin(precip1) * ia.sin(precip2) + ia.cos(precip2)) + ia.sqrt(precip3) * 2
-    return lazy_trans_expr.eval()
+def iarray_expr_lazy(expr):
+    return expr.eval()
 
 
 ia.remove_urlpath(urlpath)
 if len(sys.argv) == 3:
-    if sys.argv[2] == "mean":
-        expr = ia.expr_from_udf(mean, [precip1, precip2, precip3])
-    else:
-        expr = ia.expr_from_udf(trans, [precip1, precip2, precip3])
-
     with ia.config(urlpath=urlpath):
+        if sys.argv[2] == "mean":
+            expr = ia.expr_from_udf(mean, [precip1, precip2, precip3])
+        else:
+            expr = ia.expr_from_udf(trans, [precip1, precip2, precip3])
+
         t0 = time()
         val = iarray_expr_udf(expr)
         t = time() - t0
@@ -101,12 +93,15 @@ else:  # Lazy expression
     with ia.config(urlpath=urlpath):
         if sys.argv[2] == "mean":
             t0 = time()
-            val = iarray_expr_lazy_mean()
+            expr = (precip1 + precip2 + precip3) / 3
+            val = iarray_expr_lazy(expr)
             t = time() - t0
         else:
             t0 = time()
-            val = iarray_expr_lazy_trans()
+            expr = ia.tan(precip1) * (ia.sin(precip1) * ia.sin(precip2) + ia.cos(precip2)) + ia.sqrt(
+                precip3) * 2
+            val = iarray_expr_lazy(expr)
             t = time() - t0
-print(str(sys.argv[2]), " time ->", round(t, 3))
+    print(str(sys.argv[2]), " time ->", round(t, 3))
 
 ia.remove_urlpath(urlpath)
