@@ -47,25 +47,24 @@ else:
 
 print(am.info)
 
-ia.remove_urlpath(urlpathb)
-w = np.ones(bmshape)
-t0 = time()
-bm = ia.numpy2iarray(w, chunks=bmchunks, blocks=bmblocks, urlpath=urlpathb)
-t = time() - t0
-print("numpy2iarray time ->", round(t, 3))
-print(bm.info)
 
 ia.remove_urlpath(res_urlpath)
-@profile
-def iarray_matmul(a, b):
-    return ia.matmul(a, b, urlpath=res_urlpath)
-
-
-
 func = str(sys.argv[2])
 if func == "matmul":
+    ia.remove_urlpath(urlpathb)
+    w = np.ones(bmshape)
+    t0 = time()
+    bm = ia.numpy2iarray(w, chunks=bmchunks, blocks=bmblocks, urlpath=urlpathb)
+    t = time() - t0
+    print("numpy2iarray time ->", round(t, 3))
+    print(bm.info)
+
     if open_method == "open":
         os.system(cmd)
+
+    @profile
+    def iarray_matmul(a, b):
+        return ia.matmul(a, b, urlpath=res_urlpath)
 
     t0 = time()
     iacm_opt = iarray_matmul(am, bm)
@@ -75,7 +74,7 @@ if func == "matmul":
 else:
     if open_method == "open":
         os.system(cmd)
-    @profile
+    # @profile
     def iarray_transpose(array, path):
         return array.transpose(urlpath=path)
     @profile
@@ -84,30 +83,18 @@ else:
 
     if res_urlpath is not None:
         apath ="a.iarr"
-        bpath = "b.iarr"
     else:
         apath = None
-        bpath = None
     t0 = time()
     a_opt = iarray_transpose(am, apath)
     t = time() - t0
     print("am ", func, " time ->", round(t, 3))
-    t0 = time()
-    b_opt = iarray_transpose(bm, bpath)
-    t = time() - t0
-    print("bm ", func, " time ->", round(t, 3))
     
     t0 = time()
     acopy = iarray_copy(a_opt, apath)
     t = time() - t0
     print("a copy time ->", round(t, 3))
-    t0 = time()
-    bcopy = iarray_copy(b_opt, bpath)
-    t = time() - t0
-    print("b copy time ->", round(t, 3))
-    ia.remove_urlpath(bpath)
     ia.remove_urlpath(apath)
-
 
 ia.remove_urlpath(res_urlpath)
 

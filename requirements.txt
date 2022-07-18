@@ -12,3 +12,4 @@ h5py
 hdf5plugin
 #iarray
 seaborn
+pandas
