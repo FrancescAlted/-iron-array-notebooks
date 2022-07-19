@@ -23,7 +23,7 @@ for line in lines:
         mem_info.append(float(line[1]))
     elif line[0] == "FUNC":
         # stop_mem - start_mem
-        bl_memory = float(line[2])
+        bl_memory = round_sig(float(line[2]))
         ss_mem = round_sig(float(line[4]) - bl_memory)
         # stop - start time
         time = round_sig(float(line[5]) - float(line[3]))
@@ -37,13 +37,13 @@ for line in lines:
 f.close()
 
 # Memory peak in MiB
-ph_mem = round_sig(max(max(mem_info) - bl_memory, ss_mem))
+peak_mem = round_sig(max(max(mem_info) - bl_memory, ss_mem))
 # version
 version = ia.__version__.split("-")[0]
 
 params = ["param" + str(i) for i in range(1, max_nparams + 1)]
-names = ["script"] + params + ["bl_memory", "ph_memory", "ss_memory", "time", "version"]
-values = script_info + [bl_memory, ph_mem, ss_mem, time, version]
+names = ["script"] + params + ["bl_memory", "peak_memory", "ss_memory", "time", "version"]
+values = script_info + [bl_memory, peak_mem, ss_mem, time, version]
 data = {names[i]: values[i] for i in range(0, len(names))}
 data_df = pd.DataFrame(data, index=[0])
 

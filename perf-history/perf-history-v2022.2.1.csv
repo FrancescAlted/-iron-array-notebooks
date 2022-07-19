@@ -1,4 +1,4 @@
-script,param1,param2,param3,param4,param5,bl_memory,ph_memory,ss_memory,time,version
+script,param1,param2,param3,param4,param5,bl_memory,peak_memory,ss_memory,time,version
 iarray_constr.py,memory,ones,float32,0,0,154.582,0.43,0.0,0.0002,2022.2
 iarray_constr.py,disk,ones,float32,0,0,154.7188,0.66,0.152,0.0025,2022.2
 iarray_constr.py,memory,full,float32,0,0,154.1836,0.0,0.0,0.0002,2022.2
