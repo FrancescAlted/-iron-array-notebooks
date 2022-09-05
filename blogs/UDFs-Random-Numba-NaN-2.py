@@ -4,7 +4,7 @@ import math
 
 
 # Params for array construction
-shape = (40_000, 40_000)
+shape = (50_000, 50_000)
 dtype = np.float32
 
 @nb.jit
@@ -27,7 +27,8 @@ def circle_fun(out, vals, nrows: int, ncols: int) -> int:
 
 @profile
 def numpy_rand():
-    return np.random.random_sample(shape).astype(dtype)
+    rng = np.random.default_rng()
+    return rng.random(shape, dtype=dtype)
 
 rand_data = numpy_rand()
 

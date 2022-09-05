@@ -5,8 +5,8 @@ import math
 
 
 # Params for array construction
-shape = (40_000, 40_000)
-ia.set_config_defaults(dtype=np.float32, fp_mantissa_bits=15, favor=ia.Favor.SPEED)#, btune=False, clevel=0)
+shape = (50_000, 50_000)
+ia.set_config_defaults(dtype=np.float32, favor=ia.Favor.SPEED)#, btune=False, clevel=0)
 
 
 @udf.scalar()
