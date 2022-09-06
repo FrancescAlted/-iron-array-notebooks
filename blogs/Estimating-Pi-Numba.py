@@ -1,0 +1,48 @@
+import numpy as np
+import numba as nb
+import math
+
+
+# Params for array construction
+shape = (50_000, 50_000)
+dtype = np.float32
+
+@nb.jit
+def circle_filter(val: float, row: int, col: int, nrows: int, ncols: int) -> float:
+    x = (2. * row / nrows) - 1.
+    y = (2. * col / ncols) - 1.
+    if ((x ** 2 + y ** 2) <= 1) and val >= 0.5:
+        return 1.
+    return math.nan
+
+@nb.jit(parallel=True)
+def circle_fun(out, vals, nrows: int, ncols: int) -> int:
+    n, m = out.shape
+    for i in nb.prange(n):
+        for j in nb.prange(m):
+            out[i, j] = circle_filter(vals[i, j], i, j, nrows, ncols)
+    return 0
+
+
+@profile
+def numpy_rand():
+    rng = np.random.default_rng()
+    return rng.random(shape, dtype=dtype)
+
+rand_data = numpy_rand()
+
+circle = np.empty(shape, dtype)
+
+@profile
+def numba_computations():
+    circle_fun(circle, rand_data, *shape)
+
+numba_computations()
+
+@profile
+def numpy_reductions():
+    area_circle = np.nansum(circle)
+    area_square = np.nansum(rand_data)
+    print(f"PI value: {4 * area_circle / area_square}")
+
+numpy_reductions()
