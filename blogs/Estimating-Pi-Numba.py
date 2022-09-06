@@ -42,7 +42,7 @@ numba_computations()
 @profile
 def numpy_reductions():
     area_circle = np.nansum(circle)
-    area_square = np.nansum(rand_data)
-    print(f"PI value: {4 * area_circle / area_square}")
+    area_square = np.sum(rand_data)
+    print(f"PI estimation: {4 * area_circle / area_square}")
 
 numpy_reductions()

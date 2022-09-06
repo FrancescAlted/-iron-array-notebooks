@@ -6,7 +6,7 @@ import math
 
 # Params for array construction
 shape = (50_000, 50_000)
-ia.set_config_defaults(dtype=np.float32, fp_mantissa_bits=15, favor=ia.Favor.SPEED)#, btune=False, clevel=0)
+ia.set_config_defaults(dtype=np.float32, fp_mantissa_bits=15)#, favor=ia.Favor.SPEED)#, btune=False, clevel=0)
 
 
 @udf.scalar()
@@ -46,7 +46,7 @@ iarray_computations()
 @profile
 def iarray_reductions():
     area_circle = ia.nansum(circle, axis=(1,0))
-    area_square = ia.nansum(rand_data, axis=(1,0))
-    print(f"PI value: {4 * area_circle / area_square}")
+    area_square = ia.sum(rand_data, axis=(1,0))
+    print(f"PI estimation: {4 * area_circle / area_square}")
 
 iarray_reductions()
