@@ -4,7 +4,7 @@ import math
 
 
 # Params for array construction
-shape = (50_000, 50_000)
+shape = (40_000, 40_000)
 dtype = np.float32
 
 @nb.jit
@@ -15,12 +15,21 @@ def circle_filter(val: float, row: int, col: int, nrows: int, ncols: int) -> flo
         return 1.
     return math.nan
 
+@nb.jit
+def square_filter(val: float) -> float:
+    if val >= 0.5:
+        return 1.
+    return math.nan
+
 @nb.jit(parallel=True)
-def circle_fun(out, vals, nrows: int, ncols: int) -> int:
+def filter_func(out, vals, nrows: int, ncols: int, iscircle: bool) -> int:
     n, m = out.shape
     for i in nb.prange(n):
         for j in nb.prange(m):
-            out[i, j] = circle_filter(vals[i, j], i, j, nrows, ncols)
+            if iscircle:
+                out[i, j] = circle_filter(vals[i, j], i, j, nrows, ncols)
+            else:
+                out[i, j] = square_filter(vals[i, j])
     return 0
 
 
@@ -32,17 +41,19 @@ def numpy_rand():
 rand_data = numpy_rand()
 
 circle = np.empty(shape, dtype)
+square = np.empty(shape, dtype)
 
 @profile
 def numba_computations():
-    circle_fun(circle, rand_data, *shape)
+    filter_func(circle, rand_data, shape[0], shape[1], True)
+    filter_func(square, rand_data, shape[0], shape[1], False)
 
 numba_computations()
 
 @profile
 def numpy_reductions():
     area_circle = np.nansum(circle)
-    area_square = np.sum(rand_data)
+    area_square = np.nansum(square)
     print(f"PI estimation: {4 * area_circle / area_square}")
 
 numpy_reductions()
