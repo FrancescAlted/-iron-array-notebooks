@@ -60,6 +60,6 @@ iarray_computations()
 def iarray_reductions():
     area_circle = ia.nansum(circle)
     area_square = ia.nansum(square)
-    print(f"PI estimation: {4 * area_circle / area_square}")
+    print(f"PI estimate: {4 * area_circle / area_square}")
 
 iarray_reductions()
