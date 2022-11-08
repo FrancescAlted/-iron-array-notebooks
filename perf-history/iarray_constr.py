@@ -37,7 +37,7 @@ elif func == "full":
 elif func == "arange":
     @profile
     def iarray_arange_constr():
-        return ia.arange(shape, 0, 1, chunks=chunks, blocks=blocks, dtype=dtype, urlpath=urlpath)
+        return ia.arange(0, 1, step=1/np.prod(shape), shape=shape, chunks=chunks, blocks=blocks, dtype=dtype, urlpath=urlpath)
 
     t0 = time()
     ia_out = iarray_arange_constr()
@@ -45,7 +45,7 @@ elif func == "arange":
 elif func == "linspace":
     @profile
     def iarray_linspace_constr():
-        return ia.linspace(shape, 0, 5, chunks=chunks, blocks=blocks, dtype=dtype, urlpath=urlpath)
+        return ia.linspace(0, 5, size, shape=shape, chunks=chunks, blocks=blocks, dtype=dtype, urlpath=urlpath)
     t0 = time()
     ia_out = iarray_linspace_constr()
     t = time() - t0
